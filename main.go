@@ -14,9 +14,9 @@ func main() {
 
 	// example usage
 	folderDriver := folder.NewDriver(res)
-	orgFolder := folderDriver.GetFoldersByOrgID(orgID)
+	orgFolder := folderDriver.GetAllChildFolders(orgID, "fast-watchmen.deciding-famine")
 
-	folder.PrettyPrint(res)
+	// folder.PrettyPrint(res)
 	fmt.Printf("\n Folders for orgID: %s", orgID)
 	folder.PrettyPrint(orgFolder)
 }
