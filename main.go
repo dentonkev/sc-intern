@@ -14,9 +14,13 @@ func main() {
 
 	// example usage
 	folderDriver := folder.NewDriver(res)
-	orgFolder := folderDriver.GetAllChildFolders(orgID, "fast-watchmen.deciding-famine")
+	orgFolder, found := folderDriver.GetAllChildFolders(orgID, "no")
 
-	// folder.PrettyPrint(res)
-	fmt.Printf("\n Folders for orgID: %s", orgID)
-	folder.PrettyPrint(orgFolder)
+	if found != nil {
+		fmt.Println(found)
+	} else {
+		// folder.PrettyPrint(res)
+		fmt.Printf("\n Folders for orgID: %s", orgID)
+		folder.PrettyPrint(orgFolder)
+	}
 }
