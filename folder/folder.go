@@ -17,17 +17,17 @@ type IDriver interface {
 }
 
 type driver struct {
-	// define attributes here
-	// data structure to store folders
-	// or preprocessed data
-
-	// example: feel free to change the data structure, if slice is not what you want
-	folders []Folder
+	folders map[uuid.UUID][]Folder
 }
 
 func NewDriver(folders []Folder) IDriver {
+	m := make(map[uuid.UUID][]Folder)
+
+	for _, f := range folders {
+		m[f.OrgId] = append(m[f.OrgId], f)
+	}
+
 	return &driver{
-		// initialize attributes here
-		folders: folders,
+		folders: m,
 	}
 }
