@@ -19,25 +19,37 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, err
 	folders, exists := f.folders[orgID]
 
 	if !exists {
-		return nil, errors.New("Error: Folder does not exist in the specified organization")
+		return nil, errors.New("error: organisation does not exist")
 	}
 
-	nameExist := false
-	newName := name + "."
+	nameExists := false
+	for _, folder := range folders {
+		if folder.Name == name {
+			nameExists = true
+			break
+		}
+	}
 
+	if !nameExists {
+		for orgIDKey, folderList := range f.folders {
+			if orgIDKey == orgID {
+				continue
+			}
+			for _, folder := range folderList {
+				if folder.Name == name {
+					return nil, errors.New("error: folder does not exist in the specified organisation")
+				}
+			}
+		}
+		return nil, errors.New("error: folder does not exist")
+	}
+
+	name += "."
 	res := []Folder{}
 	for _, f := range folders {
-		if f.Name == name {
-			nameExist = true
-		}
-
-		if strings.Contains(f.Paths, newName) {
+		if strings.Contains(f.Paths, name) {
 			res = append(res, f)
 		}
-	}
-
-	if !nameExist {
-		return nil, errors.New("Error: Folder does not exist")
 	}
 
 	return res, nil
