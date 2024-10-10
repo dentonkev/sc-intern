@@ -39,7 +39,7 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 	}
 
 	if srcFolder.OrgId != dstFolder.OrgId {
-		return nil, errors.New("error: cannot move a folder to a different organization")
+		return nil, errors.New("error: cannot move a folder to a different organisation")
 	}
 
 	if strings.HasPrefix(dstFolder.Paths, srcFolder.Paths) {
@@ -50,8 +50,15 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 
 	for i := range f.folders[orgId] {
 		folder := &f.folders[orgId][i]
-		if strings.HasPrefix(folder.Paths, srcFolder.Paths) {
-			folder.Paths = strings.Replace(folder.Paths, srcFolder.Paths, dstFolder.Paths, 1)
+		if strings.Contains(folder.Paths, name) {
+			children := strings.Index(folder.Paths, name) + len(name)
+
+			var afterName string
+			if children < len(folder.Paths) {
+				afterName = folder.Paths[children:]
+			}
+
+			folder.Paths = dstFolder.Paths + "." + name + afterName
 		}
 	}
 
